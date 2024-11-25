@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 public class MyDrawPanel extends JPanel{
-    public void paintFractal( Graphics g){
+    public void paintComponent( Graphics g){
         Graphics2D g2d = (Graphics2D) g;
        
         Random random = new Random();
@@ -20,7 +20,7 @@ public class MyDrawPanel extends JPanel{
 
         GradientPaint gradient = new GradientPaint(70,70, startColor, 150, 150, endColor);
         g2d.setPaint(gradient);
-        g2d.fillRect(30, 30, 100, 100);
+        g2d.fillOval(70,70,100,100);
 
 
     }
