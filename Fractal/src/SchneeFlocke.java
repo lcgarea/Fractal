@@ -2,10 +2,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 
 /**
  * Die Koch-Scheeflocke entssteht, indem eine Linier Rekursive in vier Teile
@@ -17,7 +14,7 @@ import javax.swing.JSlider;
  * </ul>
  */
 public class SchneeFlocke  extends FractalBase implements ConfigurableFractal{
-    private static final int MARGIN = 20;  // Abstand vom Rand
+    
     
     private FractalParameterPanelHelper parameterHelper;
 
@@ -76,29 +73,26 @@ public class SchneeFlocke  extends FractalBase implements ConfigurableFractal{
             drawKoch(g, tief - 1, pBX, pBY, p2X, p2Y);
         }
     }
+    protected void setupTransform(Graphics2D g) {
+        int width = getWidth();
+        int height = getHeight();
+    
+        // Transformation: Zentrieren und skalieren
+        g.translate(width / 2, height / 2); // Zentriert den Ursprung
+        double scale = Math.min(width, height) / 600.0; // Einheitliche Skalierung
+        g.scale(scale, scale);
+    }
 
+    @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
        
-        
-        int width = getWidth();
-        int height = getHeight();
-        int margin = MARGIN; // Abstand vom Rand
-        
-        // Größe des Dreiecks basierend auf Panelgröße
-        int triWidth = (int) ((width - 2 * margin)*zoomFactor);
-        int triHeight = (int) (triWidth * Math.sqrt(3) / 2); // Höhe eines gleichseitigen Dreiecks
-        
-        // Basis des Dreiecks (unten zentriert)
-        int centerY = height / 2; // Vertikale Mitte
-        int x1 = (width - triWidth) / 2; // Unten links
-        int y1 = centerY + triHeight / 2; // Basislinie
-        int x2 = (width + triWidth) / 2; // Unten rechts
-        int y2 = y1;
-        int x3 = width / 2; // Spitze (oben zentriert)
-        int y3 = centerY - triHeight / 2;
-        
+        setupTransform(g2);
+        int x1 = -200, y1 = 115;   // Untere linke Ecke
+        int x2 = 200, y2 = 115;    // Untere rechte Ecke
+        int x3 = 0, y3 = -230;     // Spitze oben
+    
         
         // Zeichne die Schneeflocke
         g2.setColor(color);

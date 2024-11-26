@@ -1,12 +1,8 @@
 
-import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
+
 
 
 /**
@@ -65,12 +61,26 @@ public class SierpinskiDreieck extends FractalBase implements ConfigurableFracta
         
 
     }
+    protected void setupTransform(Graphics2D g) {
+        int width = getWidth();
+        int height = getHeight();
+    
+        // Transformation: Zentrieren und skalieren
+        g.translate(width / 2, height / 2); // Zentriert den Ursprung
+        double scale = Math.min(width, height) / 400.0; // Einheitliche Skalierung
+        g.scale(scale, scale);
+    }
+    
 
     public void paint(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+        setupTransform(g2);
         g2.setColor(color);
-        drawSpierpinski(g2, tief, 10, 10, 390, 10, 200, 390);
+        int x1 = -200, y1 = 200;   // Untere linke Ecke
+        int x2 = 200, y2 = 200;    // Untere rechte Ecke
+        int x3 = 0, y3 = -200;     // Spitze oben
+        drawSpierpinski(g2, tief, x1, y1, x2, y2, x3,y3);
     }
 
 

@@ -42,12 +42,22 @@ public class SquareFractal extends FractalBase implements ConfigurableFractal{
         
         
     }
+    protected void setupTransform(Graphics2D g) {
+        int width = getWidth();
+        int height = getHeight();
+    
+        // Transformation: Zentrieren und skalieren
+        g.translate(width / 2, height / 2); // Zentriert den Ursprung
+        double scale = Math.min(width, height) / 400.0; // Einheitliche Skalierung
+        g.scale(scale, scale);
+    }
     
     public void paint(Graphics g){
         super.paintComponent(g);    
         Graphics2D g2 = (Graphics2D)g;
+        setupTransform(g2);
         g2.setColor(color);
-        drawSquare(g2, tief, 20, 20, 300, 10);
+        drawSquare(g2, tief, -150, -150, 300, 10);
     }
 
 }
