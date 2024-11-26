@@ -13,10 +13,8 @@ public class FractalGui {
     JPanel rightPanel;
     static final int ABSTAND_OBEN = 10; // abstand oben in button
     static final int ABSTAND_TEXT = 20; // abstand zwischen textfeld und Label
-    static final int CONTROLPANELSIZE_WIDTH = 200;
-    static final int CONTROPANELSIZE_HEIGHT = 300;
-    static final int CONTROLFRAMESIZE_WIDTH = 700;
-    static final int CONTROLFRAMESIZE_HEIGHT = 600;
+    static final int CONTROLFRAMESIZE_WIDTH = 900;
+    static final int CONTROLFRAMESIZE_HEIGHT = 700;
     //private double zoomFactor = 1.0; // Standard-Zoom
 
     public static void main(String[] args) {
@@ -98,7 +96,7 @@ public class FractalGui {
         frame.add(BorderLayout.EAST, rightPanel);
         frame.add(BorderLayout.CENTER, fractalPanel);
         frame.setPreferredSize(new Dimension(CONTROLFRAMESIZE_WIDTH, CONTROLFRAMESIZE_HEIGHT));
-        frame.setSize(800, 600);
+        //frame.setSize(800, 600);
         frame.pack();
         frame.setVisible(true); 
     }

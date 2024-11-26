@@ -90,11 +90,22 @@ public class PythagorasBaum extends FractalBase implements ConfigurableFractal{
         }
 
     }
+
+        protected void setupTransform(Graphics2D g) {
+        int width = getWidth();
+        int height = getHeight();
+    
+        // Transformation: Zentrieren und skalieren
+        g.translate(width / 2, height / 2 + 100); // Zentriert den Ursprung
+        double scale = Math.min(width, height) / 800.0; // Einheitliche Skalierung
+        g.scale(scale, scale);
+    }
      public void paint( Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        Point p1 = new Point(250, 355);
-        Point p2 = new Point(280,  355);
+        setupTransform(g2);
+        Point p1 = new Point(-50, 50);
+        Point p2 = new Point(50,  50);
         
         drawPythagorasBaum(g2, tief, k, p1, p2);
 
