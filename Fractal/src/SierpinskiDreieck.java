@@ -1,6 +1,14 @@
-import java.awt.Canvas;
+
+import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.awt.Frame;
+import java.awt.Graphics2D;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+
+
 /**
  * Teilt man das Dreieck in vier zueinander kongruente und zum Ausgangsdreieck 
  * ähnliche Dreiecke, deren Eckpunkte die Seitenmittelpunkte des Ausgangsdreiecks 
@@ -10,54 +18,61 @@ import java.awt.Frame;
  */
 
 
-public class SierpinskiDreieck extends Canvas{
-    private int tief = 9;
-    
-    public void setTief(int tief){
-       this.tief =tief;
+public class SierpinskiDreieck extends FractalBase implements ConfigurableFractal{
+    private FractalParameterPanelHelper parameterHelper;
 
+    public SierpinskiDreieck(){
+        this.parameterHelper = new FractalParameterPanelHelper(this);
+        this.tief = parameterHelper.getTiefSlider().getValue();
     }
 
-    private void drawSpierpinski ( Graphics g, int tief, int p1X, int p1Y,  int p2X, int p2Y,  int p3X, int p3Y ){
-        g.drawLine(p1X, p1Y, p2X, p2Y);
-        g.drawLine(p2X, p2Y, p3X, p3Y);
-        g.drawLine(p3X, p3Y, p1X, p1Y);
-        if (tief > 0){
-            // mittelPunkt von der Linien
-            int mp1X = (p1X + p2X) / 2;
-            int mp1Y = (p1Y + p2Y) / 2;
-            int mp2X = (p2X + p3X) / 2;
-            int mp2Y = (p2Y + p3Y) / 2;
-            int mp3X = (p3X + p1X) / 2;
-            int mp3Y = (p3Y + p1Y) / 2;
-            drawSpierpinski(g, tief - 1, p1X, p1Y, mp1X, mp1Y, mp3X, mp3Y);
-            drawSpierpinski(g, tief -1, p2X, p2Y, mp1X, mp1Y, mp2X, mp2Y);
-            drawSpierpinski(g, tief - 1, p3X, p3Y, mp2X, mp2Y, mp3X, mp3Y);
-        }
+    @Override
+    public JPanel getConfigPanel() {
+        return parameterHelper.createBaseConfigPanel(); // Gemeinsames Panel
+    }
+
+    @Override
+    public void applyParameters() {
+        this.tief = parameterHelper.getTiefSlider().getValue(); // Slider-Wert übernehmen
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+    }
+
+
+
+
+    private void drawSpierpinski ( Graphics2D g, int tief, int x1, int y1,  int x2, int y2,  int x3, int y3 ){
+        if(tief <= 0 || Math.abs(x1 - x2) < 2) return;
+        g.drawLine(x1, y1, x2, y2);
+        g.drawLine(x2, y2, x3, y3);
+        g.drawLine(x3, y3, x1, y1);
+       
+        // mittelPunkt von der Linien
+        int mp1X = (x1 + x2) / 2;
+        int mp1Y = (y1 + y2) / 2;
+        int mp2X = (x2 + x3) / 2;
+        int mp2Y = (y2 + y3) / 2;
+        int mp3X = (x3 + x1) / 2;
+        int mp3Y = (y3 + y1) / 2;
+        drawSpierpinski(g, tief - 1, x1, y1, mp1X, mp1Y, mp3X, mp3Y);
+        drawSpierpinski(g, tief -1, x2, y2, mp1X, mp1Y, mp2X, mp2Y);
+        drawSpierpinski(g, tief - 1, x3,y3, mp2X, mp2Y, mp3X, mp3Y);
+        
 
     }
 
     public void paint(Graphics g){
-        drawSpierpinski(g, tief, 10, 10, 390, 10, 200, 390);
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(color);
+        drawSpierpinski(g2, tief, 10, 10, 390, 10, 200, 390);
     }
 
-    /*public static void main(String[] args) {
-        // Erstelle das Frame
-        Frame frame = new Frame("Sierpinski Dreieck");
-        SierpinskiDreieck canvas = new SierpinskiDreieck();
-
-        // Füge das Canvas hinzu
-        frame.add(canvas);
-        frame.setSize(400, 400);
-        frame.setVisible(true);
-
-        // Beende das Programm beim Schließen des Fensters
-        frame.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
-    }*/
 
 
 }
