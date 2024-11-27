@@ -2,6 +2,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import java.awt.Color;
 
 
 
@@ -14,8 +15,8 @@ import javax.swing.JPanel;
  */
 
 
-public class SierpinskiDreieck extends FractalBase implements ConfigurableFractal{
-    private FractalParameterPanelHelper parameterHelper;
+public class SierpinskiDreieck extends FractalBase {
+  /*   private FractalParameterPanelHelper parameterHelper;
 
     public SierpinskiDreieck(){
         this.parameterHelper = new FractalParameterPanelHelper(this);
@@ -30,6 +31,8 @@ public class SierpinskiDreieck extends FractalBase implements ConfigurableFracta
     @Override
     public void applyParameters() {
         this.tief = parameterHelper.getTiefSlider().getValue(); // Slider-Wert übernehmen
+        float hue = parameterHelper.getColoSlider().getValue()/255.0f;
+        this.color =Color.getHSBColor(hue, 1.0f, 1.0f);
         repaint();
     }
 
@@ -37,7 +40,7 @@ public class SierpinskiDreieck extends FractalBase implements ConfigurableFracta
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-    }
+    } */
 
 
 

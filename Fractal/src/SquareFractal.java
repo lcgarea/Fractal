@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -6,23 +7,8 @@ import javax.swing.JPanel;
 
 
 
-public class SquareFractal extends FractalBase implements ConfigurableFractal{
-    private FractalParameterPanelHelper parameterHelper;
-    public SquareFractal() {
-        parameterHelper = new FractalParameterPanelHelper(this);
-        this.tief = parameterHelper.getTiefSlider().getValue();
-    }
+public class SquareFractal extends FractalBase {
 
-    @Override
-    public JPanel getConfigPanel() {
-        return parameterHelper.createBaseConfigPanel(); // Gemeinsames Panel
-    }
-
-    @Override
-    public void applyParameters() {
-        this.tief = parameterHelper.getTiefSlider().getValue(); // Slider-Wert übernehmen
-        repaint();
-    }
 
     @Override
     protected void paintComponent(Graphics g) {

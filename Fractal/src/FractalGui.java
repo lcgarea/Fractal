@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class FractalGui {
     private JFrame frame;
@@ -10,13 +12,14 @@ public class FractalGui {
     private CardLayout parameterCardLayout;
     private CardLayout cardLayout;
     private JComboBox<FractalType> fractalChooser;
+    private JSlider tiefSlider;
+    private JSlider colorSlider;
     JPanel rightPanel;
     static final int ABSTAND_OBEN = 10; // abstand oben in button
     static final int ABSTAND_TEXT = 20; // abstand zwischen textfeld und Label
     static final int CONTROLFRAMESIZE_WIDTH = 900;
     static final int CONTROLFRAMESIZE_HEIGHT = 700;
-    //private double zoomFactor = 1.0; // Standard-Zoom
-
+    
     public static void main(String[] args) {
         FractalGui gui = new FractalGui();
         gui.go();
@@ -28,13 +31,10 @@ public class FractalGui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         
-     
 
-
-       // Panel mit control panel und parameter Pannel
         rightPanel = new JPanel(new BorderLayout());
         
-       // Panel mit : Generate, choose Fractal, zoom, color
+      
 
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
@@ -44,34 +44,43 @@ public class FractalGui {
         fractalChooser = new JComboBox<>(FractalType.values());
         fractalChooser.addActionListener(new FractalChooserLiestener());
         
-        JButton buttonGenerate = new JButton("Generate");
-        buttonGenerate.addActionListener(new TiefListener());
 
-        JButton zoomInButton = new JButton("Zoom In");
-        zoomInButton.addActionListener(new ZoomListener(1.2));
 
-        JButton zoomOutButton = new JButton("Zoom Out");
-        zoomOutButton.addActionListener(new ZoomListener(0.8));
-        
-        JButton colorButton = new JButton("Change Color");
-        colorButton.addActionListener(new ColorChoosserListener());
+        // Start tesst 
+        //---------------------------------
+        tiefSlider = new JSlider(JSlider.HORIZONTAL, 0, 14, 1);
+        tiefSlider.setMajorTickSpacing(2);
+        tiefSlider.setMinorTickSpacing(1);
+        tiefSlider.setPaintTicks(true);
+        tiefSlider.setPaintLabels(true);
+        tiefSlider.addChangeListener(new tiefListener2());
 
+        colorSlider = new JSlider(JSlider.HORIZONTAL,0, 255, 50);
+        colorSlider.setMajorTickSpacing(50);
+        colorSlider.setMinorTickSpacing(10);
+        colorSlider.setPaintTicks(true);
+        colorSlider.setPaintLabels(true);
+        colorSlider.addChangeListener(new colorListener()); 
         
 
         //Gui Layout
         controlPanel.add(Box.createVerticalStrut(ABSTAND_OBEN));
         controlPanel.add(new JLabel("Choose Fractal:"));
         controlPanel.add(fractalChooser);
+        
         controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
-        controlPanel.add(buttonGenerate);
+        controlPanel.add(new JLabel("Color"));
         controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
-        controlPanel.add(zoomInButton);
-        controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
-        controlPanel.add(zoomOutButton);
-        controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
-        controlPanel.add(colorButton);
-        controlPanel.add(Box.createVerticalGlue());
-    
+        controlPanel.add(colorSlider);
+
+       controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
+       controlPanel.add(new JLabel("Level"));
+       controlPanel.add(Box.createVerticalStrut(ABSTAND_TEXT));
+        controlPanel.add(tiefSlider);
+       
+        
+        //controlPanel.createGlue();
+        
 
       // Fractal panel
         fractalPanel = new JPanel(cardLayout = new CardLayout());
@@ -79,15 +88,19 @@ public class FractalGui {
             fractalPanel.add(fractalType.getFractalPanel(),fractalType.name());
         }
 
-        // Paremter panel
         paremeterPanel = new JPanel(parameterCardLayout = new CardLayout());
-        for( FractalType fractalType : FractalType.values()){
-            if( fractalType.getFractalPanel() instanceof ConfigurableFractal){
-                ConfigurableFractal fractal = (ConfigurableFractal) fractalType.getFractalPanel();
-                paremeterPanel.add(fractal.getConfigPanel(), fractalType.name());
-
+        for (FractalType fractalType : FractalType.values()) {
+        if (fractalType.getFractalPanel() instanceof ConfigurableFractal) {
+        ConfigurableFractal fractal = (ConfigurableFractal) fractalType.getFractalPanel();
+        paremeterPanel.add(fractal.getConfigPanel(), fractalType.name());
+            }
+            else {
+                // Leeres Panel für nicht-konfigurierbare Fraktale
+                paremeterPanel.add(new JPanel(), fractalType.name());
             }
         }
+        
+
         rightPanel.add(controlPanel, BorderLayout.NORTH); // Control-Panel oben
         rightPanel.add(paremeterPanel, BorderLayout.CENTER); // Parameter-Panel unten
 
@@ -96,14 +109,23 @@ public class FractalGui {
         frame.add(BorderLayout.EAST, rightPanel);
         frame.add(BorderLayout.CENTER, fractalPanel);
         frame.setPreferredSize(new Dimension(CONTROLFRAMESIZE_WIDTH, CONTROLFRAMESIZE_HEIGHT));
-        //frame.setSize(800, 600);
         frame.pack();
         frame.setVisible(true); 
     }
 
+    public class FractalChooserLiestener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            FractalType selectedFractal = (FractalType) fractalChooser.getSelectedItem();
+            if (selectedFractal != null) {
+                cardLayout.show(fractalPanel, selectedFractal.name());
+                parameterCardLayout.show(paremeterPanel, selectedFractal.name());
+            }
+        }
+    }
+
 
     //Listener für das Dropdown-menu
-    public class FractalChooserLiestener implements ActionListener{
+    /*public class FractalChooserLiestener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             
             FractalType selectedFractal = (FractalType) fractalChooser.getSelectedItem();
@@ -111,10 +133,12 @@ public class FractalGui {
                 cardLayout.show(fractalPanel, selectedFractal.name());
                 parameterCardLayout.show(paremeterPanel, selectedFractal.name());
             }
+            
         }
-    }
-    public class TiefListener implements ActionListener{
-        public void actionPerformed(ActionEvent event){
+    }*/
+    public class tiefListener2 implements ChangeListener{
+        @Override
+        public void stateChanged(ChangeEvent e){
             Component currentFractalPanel = null;
             for(Component comp : fractalPanel.getComponents()){
                 if(comp.isVisible()){
@@ -123,55 +147,41 @@ public class FractalGui {
                 }
             }
 
-            if(currentFractalPanel instanceof ConfigurableFractal){
-                ConfigurableFractal fractal = (ConfigurableFractal)currentFractalPanel;
-                fractal.applyParameters();
-            } else{
-                JOptionPane.showMessageDialog(frame, "Kein Fraktal ausgewählt!", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
+            if(currentFractalPanel instanceof FractalBase){
+                FractalBase fractal = (FractalBase)currentFractalPanel;
+                fractal.setTief(tiefSlider.getValue());
+                fractal.repaint();
+            } 
 
-        
+
         }
     }
-    public class ZoomListener implements ActionListener {
-        private double factor; // Der Zoom-Faktor
-    
-        public ZoomListener(double factor) {
-            this.factor = factor;
-        }
-    
+
+    public class colorListener implements ChangeListener{
         @Override
-        public void actionPerformed(ActionEvent event) {
-            // Auf alle Fraktale im Enum anwenden
-            for (FractalType fractalType : FractalType.values()) {
-                if (fractalType.getFractalPanel() instanceof FractalBase) {
-                    FractalBase fractal = (FractalBase) fractalType.getFractalPanel();
-                    fractal.setZoomFactor(fractal.getZoomFactor() * factor); // Zoom anpassen
-                    fractal.repaint(); // Panel neu zeichnen
+        public void stateChanged(ChangeEvent e){
+            Component currentFractalPanel = null;
+            for (Component comp : fractalPanel.getComponents()){
+                if(comp.isVisible()){
+                    currentFractalPanel = comp;
+                    break;
                 }
-            }
-        }
-    }
-    public class ColorChoosserListener implements ActionListener {
-        public void actionPerformed(ActionEvent event){
-            Color newColor = JColorChooser.showDialog(frame, "Choose a Color", Color.BLACK);
-            if(newColor != null){
-                for (Component comp : fractalPanel.getComponents()) {
-                    if (comp.isVisible() && comp instanceof FractalBase) {
-                        FractalBase activeFractal = (FractalBase) comp;
-                        System.out.println("new Color:" + newColor);
-                        System.out.println("Aktives Fraktal: " + activeFractal.getClass().getName());
-                        activeFractal.setColor(newColor); 
-                        break;
-                    }
-                }
-            
-            }
-        }
 
-    }
-    
-    
+            }
+            if(currentFractalPanel instanceof FractalBase){
+                FractalBase fractal = (FractalBase) currentFractalPanel;
+                float hue = colorSlider.getValue()/255.0f;
+                fractal.setColor(Color.getHSBColor(hue, 1.0f, 1.0f));
+                fractal.repaint();
+            }
+            if (currentFractalPanel instanceof PythagorasBaum) {
+                PythagorasBaum fractal = (PythagorasBaum) currentFractalPanel;
+                float hue = colorSlider.getValue() / 255.0f;
+                fractal.setBaseHue(hue);
+                fractal.repaint();
+            }
+        }
+    } 
 
 
 

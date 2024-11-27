@@ -25,8 +25,8 @@ public class FractalBase extends JPanel{
     }
     public void setColor(Color color){
         this.color = color;
-        System.out.println("Color set to: " + color);
-        this.repaint();
+        //System.out.println("Color set to: " + color);
+        //this.repaint();
     }
 
 

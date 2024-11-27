@@ -4,44 +4,60 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-public class PythagorasBaum extends FractalBase implements ConfigurableFractal{ 
-    private FractalParameterPanelHelper parameterHelper;
+public class PythagorasBaum extends FractalBase implements ConfigurableFractal { 
+
     private JSlider kSlider;
-    private double k;
+    private double k = 0.5;
+    private float baseHue = 0.33f;
+    private final int ABSTAND_OBEN = 10;
+
+    public void setBaseHue(float hue) {
+        this.baseHue = hue;
+    }
 
     public PythagorasBaum() {
-        parameterHelper = new FractalParameterPanelHelper(this);
-        this.tief = parameterHelper.getTiefSlider().getValue();
-
-        // Initialisiere Slider für "k"
-        kSlider = new JSlider(JSlider.VERTICAL, 0, 100, 50);
+        
+        kSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
         kSlider.setMajorTickSpacing(25);
         kSlider.setMinorTickSpacing(5);
         kSlider.setPaintTicks(true);
         kSlider.setPaintLabels(true);
-        kSlider.addChangeListener(e -> this.applyParameters());
+        kSlider.addChangeListener(e -> {
+            this.k = kSlider.getValue() / 100.0; // Aktualisiere k
+            repaint(); // Neu zeichnen
+        });
+       
     }
-
+    public void applyParameters() {
+      
+        this.k = kSlider.getValue() / 100.0; // k-Wert übernehmen
+        repaint();
+    } 
     @Override
     public JPanel getConfigPanel() {
-        JPanel panel = parameterHelper.createBaseConfigPanel(); // Gemeinsame Logik für Level
+        JPanel panel = new JPanel(); // Gemeinsame Logik für Level
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
         JLabel kLabel = new JLabel("Skalierung k:");
         kLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        panel.add(Box.createVerticalStrut(ABSTAND_OBEN));
         panel.add(kLabel);
-        panel.add(kSlider); // Füge k-Slider hinzu
+
+        panel.add(Box.createVerticalStrut(ABSTAND_OBEN));
+        panel.add(kSlider); 
+
         return panel;
     }
 
-    @Override
-    public void applyParameters() {
-        this.tief = parameterHelper.getTiefSlider().getValue();
-        this.k = kSlider.getValue() / 100.0; // k-Wert übernehmen
-        repaint();
-    }
+   
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -54,7 +70,12 @@ public class PythagorasBaum extends FractalBase implements ConfigurableFractal{
     public void drawPythagorasBaum(Graphics2D g, int tief, double k, Point p1, Point p2 ){
         if ( tief >= 0){
 
-        g.setColor(new Color(0.0f, 1.0f/(tief + 1.0f), 0.0f, 25.0f/(tief +25.0f)));
+            float saturation = 0.9f / (tief + 1.0f);
+            float brightness = 0.9f;
+            float alpha = 20.0f / (tief + 25.0f);
+            Color color = Color.getHSBColor(baseHue, saturation, brightness);
+
+        g.setColor(new Color (color.getRed(), color.getGreen(), color.getBlue(), (int) (alpha * 255)));
         tief --;
 
         int dx = p2.x - p1.x;
@@ -110,16 +131,6 @@ public class PythagorasBaum extends FractalBase implements ConfigurableFractal{
         drawPythagorasBaum(g2, tief, k, p1, p2);
 
      }
-/*      public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        PythagorasBaum baum = new PythagorasBaum();
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800);
-        
-        //aum.setColor(Color.GREEN);
-        frame.add(baum);
-        frame.setVisible(true);
-      }*/
-
+    
 }
