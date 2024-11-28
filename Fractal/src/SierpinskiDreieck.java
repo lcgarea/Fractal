@@ -16,31 +16,7 @@ import java.awt.Color;
 
 
 public class SierpinskiDreieck extends FractalBase {
-  /*   private FractalParameterPanelHelper parameterHelper;
-
-    public SierpinskiDreieck(){
-        this.parameterHelper = new FractalParameterPanelHelper(this);
-        this.tief = parameterHelper.getTiefSlider().getValue();
-    }
-
-    @Override
-    public JPanel getConfigPanel() {
-        return parameterHelper.createBaseConfigPanel(); // Gemeinsames Panel
-    }
-
-    @Override
-    public void applyParameters() {
-        this.tief = parameterHelper.getTiefSlider().getValue(); // Slider-Wert übernehmen
-        float hue = parameterHelper.getColoSlider().getValue()/255.0f;
-        this.color =Color.getHSBColor(hue, 1.0f, 1.0f);
-        repaint();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        
-    } */
+ 
 
 
 

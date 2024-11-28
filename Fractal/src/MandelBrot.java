@@ -3,7 +3,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
 
 /**
  * MandelBrotSet:el numero c complejo  pertenece al mandelBrottSet cuando para
@@ -11,7 +10,7 @@ import javax.swing.JFrame;
  * c = cRe + cIm*i 
  * Marthematicamente se ha demostrado que la mayoria de lo numpero de mandel pretenecen al conjunto de
  * 2.5 <= x <= 1  & -1 <= x <= 1;
- * mmatematicamente tambien se ha de mostrado que cuando |zn| > 2 entonces zn crece exponecialmente con n
+ * mmatematicamente tambien se ha demostrado que cuando |zn| > 2 entonces zn crece exponecialmente con n
  * y por tanto diverge
  * el fractal de Mandel se obtine entonces difidiendo una imagen en pixel y asociando cada pixel a un numero
  * imaginario c , si c pertenece al mandelbrott set enntoces de pinta de negro y sino dependiendo de la velocidad de divergencia
@@ -28,15 +27,35 @@ import javax.swing.JFrame;
  * 
  */
 
-public class MandelBrot extends FractalBase {
+public class MandelBrot extends KomplexeBase {
+
+    protected float hueInitial;
+    public MandelBrot(){
+        this.color = Color.BLACK;
+        this.hueInitial = 0.7f;
+        this.colorSecund= Color.getHSBColor(0.7f, 0.8f, 1.0f);
+    }
+
+
+    @Override
+    public void setColor(Color color){
+        super.setColor(color);
+        repaint();
+    }
+    @Override
+    public void setColorSecund(Color colorSecund){
+        super.setColorSecund(colorSecund);
+        repaint();
+    }
 
 
     private double xmin = -2.5;
     private double xmax = 1;
     private double ymin = -1;
     private double ymax = 1;
-    int maxIte = 1000; // Max der Iterationen
-
+    //private Color color = Color.BLACK;
+    
+   
  
     /**
      * Methode zum überprüfen, ob c gehört zum MandelBrott set
@@ -50,7 +69,7 @@ public class MandelBrot extends FractalBase {
         double zRe = 0; // z = zRe + zIm + i
         double zIm = 0; 
         double zModQuad = 0; // modulo de z al cuadrado
-        while( iter < maxIte && zModQuad <= 4){
+        while( iter < maxIter && zModQuad <= 4){
             double temp = zRe;
             zRe = zRe * zRe - zIm * zIm + cRe;
             zIm = 2 * temp * zIm + cIm;
@@ -61,22 +80,56 @@ public class MandelBrot extends FractalBase {
        
         return iter;
     }
-
-    private Color getFarbe(int iter){
-        if (iter == 1000) {
-           
-            return Color.BLACK;
+    private Color getFarbe(int iter) {
+        if (iter == maxIter) {
+            return this.color; // MandelBrottSet Black
         }
-        float hue = 0.7f +(float) iter / 1000;
-        return Color.getHSBColor(hue, 0.8f, 1.0f);
+    
+       //From slider die farben, der Punte die nicht zu mandelSet gehorz
+        int red = colorSecund.getRed();
+        int green = colorSecund.getGreen();
+        int blue = colorSecund.getBlue();
+    
+        
+        float[] hsb = Color.RGBtoHSB(red, green, blue, null);
+        float hueInitial = hsb[0];
+        float saturationInitial = hsb[1];
+        float brightnessInitial = hsb[2];
+    
+        // Ajustar hue dinámicamente
+        float hue = (hueInitial + (float) iter / maxIter * 0.7f) % 1.0f;
+    
+        // Ajustar saturación y brillo para permitir el blanco
+        float saturation = Math.max(0.0f, saturationInitial - (float) iter / maxIter * 0.8f);
+        float brightness = Math.min(1.0f, brightnessInitial + (float) iter / maxIter * 0.5f);
+    
+        // Withe 
+        if (red == 255 && green == 255 && blue == 255) {
+            saturation = 0.0f; // Blanco puro no tiene saturación
+            brightness = 1.0f; // Blanco puro tiene brillo máximo
+        }
+    
+        // Retornar el color ajustado
+        return Color.getHSBColor(hue, saturation, brightness);
+    }
 
+  
+    private void setupTransform(Graphics2D g){
+        int width = getWidth();
+        int height = getHeight();
+
+        g.translate(width/2, height/2);
+        double scale = Math.min(width, height)/4.0;
+        g.scale(scale, scale);
     }
 
     
     @Override
     protected void paintComponent(Graphics g)  {
 
-        super.paintComponent(g);
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D) g;
+    //setupTransform(g2);
     int breite = getWidth();
     int hoehe = getHeight();
     BufferedImage image = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
@@ -91,14 +144,14 @@ public class MandelBrot extends FractalBase {
     g.drawImage(image, 0, 0, null);
     }
 
-    public static void main(String[] args) {
+   /*  public static void main(String[] args) {
         JFrame frame = new JFrame("Mandelbrot");
         MandelBrot mandelBrott = new MandelBrot();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,800);
         frame.add(mandelBrott);
         frame.setVisible(true);
-    }
+    } */
     
 
 }

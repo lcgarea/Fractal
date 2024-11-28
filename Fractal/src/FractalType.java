@@ -4,7 +4,8 @@ public enum FractalType {
     SQUARE("Square Fractal", new SquareFractal()),
     SIERPINSKi("Sierpinski Triangle", new SierpinskiDreieck()),
     SCHNEEFLOCKE("Scheenflocke", new SchneeFlocke()),
-    PYTHAGORASBAUM("Pythagorasbaum", new PythagorasBaum());
+    PYTHAGORASBAUM("Pythagorasbaum", new PythagorasBaum()),
+    MandelBrot("Mandelbrott", new MandelBrot());
 
     private final String name;
     private final JPanel fractalPanel;

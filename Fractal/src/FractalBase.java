@@ -9,12 +9,12 @@ import java.awt.Color;
  * - color
  */
 
-public class FractalBase extends JPanel{
+public class FractalBase extends FraktalBaseV0{
     protected int tief = 1 ;
     protected double zoomFactor = 1.0;
-    protected Color color;
+   // protected Color color;
 
-    public void setTief(int tief){
+     public void setTief(int tief){
         this.tief = tief;
     }
     public double getZoomFactor() {
@@ -23,11 +23,14 @@ public class FractalBase extends JPanel{
     public void setZoomFactor(double zoomFactor) {
         this.zoomFactor = zoomFactor;
     }
-    public void setColor(Color color){
+    public int getTief(){
+        return this.tief;
+    }
+   /*  public void setColor(Color color){
         this.color = color;
         //System.out.println("Color set to: " + color);
         //this.repaint();
-    }
+    } */
 
 
 
