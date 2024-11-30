@@ -17,7 +17,6 @@ public class PythagorasBaum extends KonstruktiveBase implements ConfigurableFrac
 
     private JSlider kSlider;
     private double k = 0.5;
-    private float baseHue = 0.33f;
     private final int ABSTAND_OBEN = 10;
 
   
@@ -85,7 +84,7 @@ public class PythagorasBaum extends KonstruktiveBase implements ConfigurableFrac
             if(red == 255 && green == 255 && blue == 255){
                 float saturation = 0.0f; // Sin saturación para blanco perfecto
                 float brightness = 1.0f; // Máximo brillo
-                float alpha = 1.0f;      // Total opacidad
+
                 Color whiteColor = Color.getHSBColor(0, saturation, brightness);
                 g.setColor(new Color(whiteColor.getRed(), whiteColor.getGreen(), whiteColor.getBlue()));
 
