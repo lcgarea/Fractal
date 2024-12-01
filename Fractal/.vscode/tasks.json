@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build Jar",
+        "type": "shell",
+        "command": "javac -d bin src/**/*.java && jar cfm Fractal.jar MANIFEST.MF -C bin .",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": [],
+        "detail": "Kompiliert alle Java-Dateien und erstellt das Fractal.jar-File"
+      }
+    ]
+  }

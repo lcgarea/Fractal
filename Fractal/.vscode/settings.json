@@ -1,7 +1,8 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": ["src", "test"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "lib/**/*.jar",
+        "C:\\Users\\0Student\\SimpleProject\\SimpleProject\\lib\\junit-platform-console-standalone-1.11.3.jar",
     ]
 }

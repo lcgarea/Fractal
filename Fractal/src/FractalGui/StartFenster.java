@@ -15,10 +15,12 @@ import javax.swing.SwingConstants;
 public class StartFenster {
     private static  final int FRAME_WIDTH = 900;
     private static final int FRAME_HEIGT = 700;
-    public static void main(String[] args) {
-        
+    private JFrame  startFrame;
+
+    public void go(){
+
         // Hauptfenster 
-        JFrame startFrame = new JFrame();
+        startFrame = new JFrame("Fractal Generator");
         startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         startFrame.setSize(FRAME_WIDTH, FRAME_HEIGT);
         startFrame.setLayout(new BorderLayout());
@@ -42,26 +44,43 @@ public class StartFenster {
       
 
         //buttons zum fraktale fenster
-        JButton kosntrButton = new JButton("Konstruktive Fraktale");
+        JButton kosntrButton = new JButton("Geometrische Fraktale");
+        kosntrButton.setContentAreaFilled(false);
         buttonPanel.add(kosntrButton);
-        kosntrButton.addActionListener(e->KonstruktiveFraktal.main(args));
+
+        //kosntrButton.addActionListener(e->KonstruktiveFraktal.main(args));
+        kosntrButton.addActionListener(e->{
+            startFrame.setVisible(false);
+            GeoFraktaleGui konstruktiveGui = new GeoFraktaleGui(this);
+            konstruktiveGui.go();});
         buttonPanel.add(Box.createVerticalStrut(20));
 
-        JButton komplexButton = new JButton("Komplexe Fraktale");
+        JButton komplexButton = new JButton("Mathematische Fraktale");
         buttonPanel.add(komplexButton);
-        komplexButton.addActionListener(e->KomplexeFraktaleGui.main(args));
+        komplexButton.setContentAreaFilled(false);
+        komplexButton.addActionListener(e ->{
+            startFrame.setVisible(false);
+            MatFraktaleGui komplexeGui = new MatFraktaleGui(this);
+            komplexeGui.go();
+        });
+        //komplexButton.addActionListener(e->KomplexeFraktaleGui.main(args));
         buttonPanel.add(Box.createVerticalGlue());
         //add Acction liesterne
 
         startFrame.add(willkomemPanel, BorderLayout.CENTER);
         startFrame.add(buttonPanel, BorderLayout.EAST);
-
         startFrame.setVisible(true);
 
-
-
-
-
     }
+    public static void main(String[] args) {
+        StartFenster startFrame = new StartFenster();
+        startFrame.go();
+  
+
+   
+    }
+     public void show(){
+         startFrame.setVisible(true);
+     }
 
 }

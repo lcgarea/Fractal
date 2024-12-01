@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
  * 
  */
 
-public class MandelBrot extends KomplexeBase {
+public class MandelBrot extends MatFraktalBase {
 
     protected float hueInitial;
     public MandelBrot(){

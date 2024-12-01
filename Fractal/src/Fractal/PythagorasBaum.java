@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-public class PythagorasBaum extends KonstruktiveBase implements ConfigurableFractal { 
+public class PythagorasBaum extends GeoFraktalBase implements ConfigurableFractal { 
 
     private JSlider kSlider;
     private double k = 0.5;
@@ -49,7 +49,7 @@ public class PythagorasBaum extends KonstruktiveBase implements ConfigurableFrac
         this.k = kSlider.getValue() / 100.0; // k-Wert übernehmen
         repaint();
     } 
-    @Override
+  //  @Override
     public JPanel getConfigPanel() {
         JPanel panel = new JPanel(); // Gemeinsame Logik für Level
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

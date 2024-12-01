@@ -2,9 +2,7 @@ package Fractal;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Color;
 
-import javax.swing.JPanel;
 
 /**
  * Die Koch-Scheeflocke entssteht, indem eine Linier Rekursive in vier Teile
@@ -15,7 +13,7 @@ import javax.swing.JPanel;
  * <li>  Dies wird wiederholt, bis die gewünschte Rekursionstiefe erreicht ist </li>
  * </ul>
  */
-public class SchneeFlocke  extends KonstruktiveBase {
+public class SchneeFlocke  extends GeoFraktalBase {
 
     private void drawKoch(Graphics g, int tief, int p1X, int p1Y, int p2X, int p2Y ){
         double linienLaenge = Math.sqrt(Math.pow(p2X - p1X, 2) + Math.pow(p2Y - p1Y, 2));

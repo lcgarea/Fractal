@@ -14,7 +14,7 @@ import java.awt.Graphics2D;
  */
 
 
-public class SierpinskiDreieck extends KonstruktiveBase {
+public class SierpinskiDreieck extends GeoFraktalBase {
  
 
 

@@ -4,7 +4,7 @@ package Fractal;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class SquareFractal extends KonstruktiveBase {
+public class SquareFractal extends GeoFraktalBase {
 
     public SquareFractal(){
         super();
